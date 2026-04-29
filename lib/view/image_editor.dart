@@ -20,8 +20,6 @@ import 'package:magicepaperapp/util/epd/epd.dart';
 import 'package:magicepaperapp/constants/color_constants.dart';
 import 'package:magicepaperapp/l10n/app_localizations.dart';
 import '../util/app_logger.dart';
-import 'package:magicepaperapp/provider/getitlocator.dart';
-
 
 class ImageEditor extends StatefulWidget {
   final DisplayDevice device;
@@ -167,7 +165,7 @@ class _ImageEditorState extends State<ImageEditor> {
     try {
       await Future.delayed(const Duration(milliseconds: 50));
       final rawImages =
-          processImages(originalImage: sourceImage, epd: widget.device);
+      processImages(originalImage: sourceImage, epd: widget.device);
       final processedPngs = <Uint8List>[];
       for (int i = 0; i < rawImages.length; i++) {
         processedPngs.add(img.encodePng(rawImages[i]));
@@ -221,7 +219,7 @@ class _ImageEditorState extends State<ImageEditor> {
       }
 
       final nonWhiteColors =
-          widget.device.colors.where((c) => c != Colors.white);
+      widget.device.colors.where((c) => c != Colors.white);
 
       int exportedCount = 0;
       for (final color in nonWhiteColors) {
@@ -434,7 +432,7 @@ class _ImageEditorState extends State<ImageEditor> {
                                       content: Text(
                                         _selectedWaveform == null
                                             ? appLocalizations
-                                                .fullRefreshSelected
+                                            .fullRefreshSelected
                                             : "${appLocalizations.waveformSelected} ${_selectedWaveform!.name}",
                                       ),
                                       backgroundColor: colorPrimary,
@@ -472,20 +470,20 @@ class _ImageEditorState extends State<ImageEditor> {
                 onPressed: widget.isExportOnly
                     ? _exportXbmFiles
                     : () async {
-                        img.Image finalImg = _rawImages[_selectedFilterIndex];
+                  img.Image finalImg = _rawImages[_selectedFilterIndex];
 
-                        if (flipHorizontal) {
-                          finalImg = img.flipHorizontal(finalImg);
-                        }
-                        if (flipVertical) {
-                          finalImg = img.flipVertical(finalImg);
-                        }
-                        await widget.device.transfer(
-                          context,
-                          finalImg,
-                          waveform: _selectedWaveform,
-                        );
-                      },
+                  if (flipHorizontal) {
+                    finalImg = img.flipHorizontal(finalImg);
+                  }
+                  if (flipVertical) {
+                    finalImg = img.flipVertical(finalImg);
+                  }
+                  await widget.device.transfer(
+                    context,
+                    finalImg,
+                    waveform: _selectedWaveform,
+                  );
+                },
                 style: TextButton.styleFrom(
                   backgroundColor: colorAccent,
                   foregroundColor: Colors.white,
@@ -507,47 +505,47 @@ class _ImageEditorState extends State<ImageEditor> {
         bottom: true,
         child: _isInitializing || imgLoader.isLoading || _isProcessingImages
             ? Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const CircularProgressIndicator(
-                      valueColor: AlwaysStoppedAnimation<Color>(colorAccent),
-                    ),
-                    const SizedBox(height: 16),
-                    Text(
-                      _isProcessingImages
-                          ? appLocalizations.processingImages
-                          : appLocalizations.loading,
-                      style: const TextStyle(color: colorBlack, fontSize: 14),
-                    ),
-                  ],
-                ),
-              )
-            : Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                child: _processedPngs.isNotEmpty
-                    ? ImageList(
-                        key: ValueKey(_processedSourceImage),
-                        processedPngs: _processedPngs,
-                        epd: widget.device,
-                        width: widget.device.height,
-                        height: widget.device.width,
-                        selectedIndex: _selectedFilterIndex,
-                        flipHorizontal: flipHorizontal,
-                        flipVertical: flipVertical,
-                        onFilterSelected: _onFilterSelected,
-                        onFlipHorizontal: toggleFlipHorizontal,
-                        onFlipVertical: toggleFlipVertical,
-                        onSave: _saveCurrentImage,
-                      )
-                    : Center(
-                        child: Text(
-                          appLocalizations.importStartingImageFeedback,
-                          style:
-                              const TextStyle(color: Colors.grey, fontSize: 16),
-                        ),
-                      ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const CircularProgressIndicator(
+                valueColor: AlwaysStoppedAnimation<Color>(colorAccent),
               ),
+              const SizedBox(height: 16),
+              Text(
+                _isProcessingImages
+                    ? appLocalizations.processingImages
+                    : appLocalizations.loading,
+                style: const TextStyle(color: colorBlack, fontSize: 14),
+              ),
+            ],
+          ),
+        )
+            : Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+          child: _processedPngs.isNotEmpty
+              ? ImageList(
+            key: ValueKey(_processedSourceImage),
+            processedPngs: _processedPngs,
+            epd: widget.device,
+            width: widget.device.height,
+            height: widget.device.width,
+            selectedIndex: _selectedFilterIndex,
+            flipHorizontal: flipHorizontal,
+            flipVertical: flipVertical,
+            onFilterSelected: _onFilterSelected,
+            onFlipHorizontal: toggleFlipHorizontal,
+            onFlipVertical: toggleFlipVertical,
+            onSave: _saveCurrentImage,
+          )
+              : Center(
+            child: Text(
+              appLocalizations.importStartingImageFeedback,
+              style:
+              const TextStyle(color: Colors.grey, fontSize: 16),
+            ),
+          ),
+        ),
       ),
       bottomNavigationBar: BottomActionMenu(
           epd: widget.device,
@@ -578,7 +576,7 @@ class BottomActionMenu extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-     final appLocalizations = AppLocalizations.of(context)!;
+    final appLocalizations = AppLocalizations.of(context)!;
     return SafeArea(
       top: false,
       bottom: true,
@@ -603,7 +601,7 @@ class BottomActionMenu extends StatelessWidget {
               _buildActionButton(
                 context: context,
                 icon: Icons.add_photo_alternate_outlined,
-                label: appLocalizations.import,
+                label: appLocalizations.importImageButtonLabel,
                 onTap: () async {
                   final success = await imgLoader.pickImage(
                     width: epd.width,
@@ -625,7 +623,7 @@ class BottomActionMenu extends StatelessWidget {
                 label: appLocalizations.openEditor,
                 onTap: () async {
                   final canvasBytes =
-                      await Navigator.of(context).push<Uint8List>(
+                  await Navigator.of(context).push<Uint8List>(
                     MaterialPageRoute(
                       builder: (context) => MovableBackgroundImageExample(
                         width: epd.width,
@@ -647,7 +645,7 @@ class BottomActionMenu extends StatelessWidget {
               _buildActionButton(
                 context: context,
                 icon: Icons.text_fields,
-                label: appLocalizations.text,
+                label: appLocalizations.textPrefix,
                 onTap: () async {
                   final bytes = await Navigator.of(context).push<Uint8List>(
                     MaterialPageRoute(
